@@ -2,11 +2,9 @@ package com.example.beatme;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.beatme.authentication.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -18,7 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class landingPage extends AppCompatActivity {
+public class LandingActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     private AppBarConfiguration mAppBarConfiguration;
@@ -30,20 +28,13 @@ public class landingPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_tournaments, R.id.nav_match)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -52,7 +43,7 @@ public class landingPage extends AppCompatActivity {
 
         navigationView.getMenu().findItem(R.id.nav_logout).setOnMenuItemClickListener(menuItem -> {
             mAuth.signOut();
-            Intent login = new Intent(landingPage.this, LoginActivity.class);
+            Intent login = new Intent(LandingActivity.this, LoginActivity.class);
             login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(login);
             finish();
@@ -73,4 +64,7 @@ public class landingPage extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    @Override
+    public void onBackPressed() { }
 }

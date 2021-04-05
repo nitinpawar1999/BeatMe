@@ -3,22 +3,22 @@
     package="com.example.beatme">
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_beatme"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_beatme_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BeatMe">
+        android:theme="@style/Theme.BeatMe"
+        android:allowBackup="false">
         <activity
-            android:name=".landingPage"
+            android:name=".LandingActivity"
             android:label="@string/title_activity_landing_page"
-            android:theme="@style/Theme.BeatMe.NoActionBar"></activity>
+            android:theme="@style/Theme.BeatMe.NoActionBar" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".authentication.RegisterActivity"
             android:label="registerPage"
-            android:theme="@style/Theme.BeatMe.NoActionBar"></activity>
+            android:theme="@style/Theme.BeatMe.NoActionBar" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".authentication.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.BeatMe.NoActionBar">
             <intent-filter>

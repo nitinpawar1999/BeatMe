@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.beatme.ui.gallery.GalleryFragment"
+        android:id="@+id/nav_tournaments"
+        android:name="com.example.beatme.ui.tournaments.TournamentsFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_tournaments" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.beatme.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_match"
+        android:name="com.example.beatme.ui.matches.MatchesFragment"
+        android:label="Matches"
+        tools:layout="@layout/fragment_matches" />
 </navigation>
