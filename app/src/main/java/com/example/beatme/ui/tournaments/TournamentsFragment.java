@@ -13,12 +13,21 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.beatme.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class TournamentsFragment extends Fragment {
 
+    View root;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_tournaments, container, false);
+        root = inflater.inflate(R.layout.fragment_tournaments, container, false);
+        FloatingActionButton tournament_fb = root.findViewById(R.id.tournament_fb);
 
+
+
+        tournament_fb.setOnClickListener(v -> {
+            AddTournamentFragment addTournamentFragment = new AddTournamentFragment();
+            addTournamentFragment.show(getParentFragmentManager(), "dialogAddTournament");
+        });
         return root;
     }
 }

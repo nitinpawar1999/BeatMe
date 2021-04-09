@@ -1,22 +1,14 @@
 package com.example.beatme.ui.matches;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -33,7 +25,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,7 +33,6 @@ public class MatchesFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private static final String TAG = "MatchFragment";
     View root;
-    List<Match> matchList;
     MatchAdapter matchAdapter;
     RecyclerView matchRecyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -140,7 +130,7 @@ public class MatchesFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         list.add(match);
                     }
                     matchAdapter = new MatchAdapter(list, currentTab, getChildFragmentManager());
-                    initializeRecyclerView(matchRecyclerView, matchAdapter, list);
+                    initializeRecyclerView(matchRecyclerView, matchAdapter);
 
                 } else {
                     Log.d(TAG, "Error getting data", task.getException());
@@ -177,7 +167,7 @@ public class MatchesFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     }
 
                     matchAdapter = new MatchAdapter(list, currentTab, getChildFragmentManager());
-                    initializeRecyclerView(matchRecyclerView, matchAdapter, list);
+                    initializeRecyclerView(matchRecyclerView, matchAdapter);
 
                 } else {
                     Log.d(TAG, "Error getting data", task.getException());
@@ -188,66 +178,9 @@ public class MatchesFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
     }
 
-    public interface ClickListener {
-        void onClick(View view, int position);
-    }
-
-    static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private final ClickListener clicklistener;
-        private final GestureDetector gestureDetector;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recycleView, final ClickListener clicklistener) {
-
-            this.clicklistener = clicklistener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clicklistener != null && gestureDetector.onTouchEvent(e)) {
-                clicklistener.onClick(child, rv.getChildAdapterPosition(child));
-            }
-
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(@NotNull RecyclerView rv, @NotNull MotionEvent e) {
-
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-    }
-
-    public void initializeRecyclerView(RecyclerView recyclerView, MatchAdapter adapter, List<Match> list) {
+    public void initializeRecyclerView(@NotNull RecyclerView recyclerView, MatchAdapter adapter) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-        /*recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                if(currentTab == 0) {
-                    MatchView matchView = new MatchView(list.get(position).getMatch_uid());
-                    matchView.show(getChildFragmentManager(), "dialogMatchView");
-                }
-                if(currentTab == 1){
-                    UpdateMatchFragment updateMatchFragment = new UpdateMatchFragment(list.get(position).getMatch_uid());
-                    updateMatchFragment.show(getChildFragmentManager(), "dialogUpdateMatch");
-                }
-            }
-        })
-        );
-        */
-
 
     }
 }

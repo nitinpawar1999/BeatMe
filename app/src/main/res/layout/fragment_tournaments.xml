@@ -4,28 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.tournaments.TournamentsFragment">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tournamentTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabTextColor="@color/black"
+        style="@style/Widget.MaterialComponents.TabLayout.Colored"
         app:layout_constraintBottom_toTopOf="@id/tournament_swipe_layout"
-        >
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/all_tournaments"
-            />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/your_tournaments"
-            />
+            android:text="@string/all_tournaments" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/your_tournaments" />
     </com.google.android.material.tabs.TabLayout>
+
+    <TableRow
+        android:background="#52000000"
+        android:layout_height="2dp"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/tournamentTabLayout"
+        app:layout_constraintBottom_toTopOf="@id/tournament_load_progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/tournament_load_progress"
         android:layout_width="match_parent"

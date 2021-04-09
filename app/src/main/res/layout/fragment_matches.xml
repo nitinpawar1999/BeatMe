@@ -12,7 +12,7 @@
         android:id="@+id/matchesTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabTextColor="@color/black"
+        style="@style/Widget.MaterialComponents.TabLayout.Colored"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/matches_swipe_layout"
         >
@@ -28,6 +28,17 @@
             android:text="@string/your_matches"
             />
     </com.google.android.material.tabs.TabLayout>
+
+    <TableRow
+        android:background="#52000000"
+        android:layout_height="2dp"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/matchesTabLayout"
+        app:layout_constraintBottom_toTopOf="@id/matches_load_progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/matches_load_progress"
         android:layout_width="match_parent"
