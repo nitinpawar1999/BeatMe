@@ -113,7 +113,6 @@ public class MatchesFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
 
-                        Log.d(TAG, "SEE_THIS_SEE_THIS_SEE_THIS" + documentSnapshot.getId() + " => " + documentSnapshot.getData());
                         String match_uid = documentSnapshot.getId();
                         String userString;
                         if (Objects.equals(user.getEmail(), documentSnapshot.get("user"))) {
@@ -148,8 +147,6 @@ public class MatchesFragment extends Fragment implements SwipeRefreshLayout.OnRe
             db.collection("matches").whereEqualTo("user", user.getEmail()).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
-                        Log.d(TAG, "SEE_THIS_SEE_THIS_SEE_THIS" + documentSnapshot.getId() + " => " + documentSnapshot.getData());
-
                         String match_uid = documentSnapshot.getId();
                         String userString;
                         if (Objects.equals(user.getEmail(), documentSnapshot.get("user"))) {

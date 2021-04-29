@@ -65,4 +65,11 @@
     <string name="your_tournaments">Your Tournaments</string>
     <string name="all_matches">All Matches</string>
     <string name="your_matches">Your Matches</string>
+    <string name="team_name">Team Name</string>
+    <string name="add_team">Add Team</string>
+    <string name="tournament_name">Tournament Name</string>
+    <string name="team_1">Team 1</string>
+    <string name="team_2">Team 2</string>
+    <string name="submit">Submit</string>
+    <string name="random_shuffle">Random Shuffle</string>
 </resources>
