@@ -4,8 +4,10 @@
       <map>
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/activity_login.xml" value="0.1322463768115942" />
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/activity_register.xml" value="0.1322463768115942" />
+        <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/fragment_brackets.xml" value="0.1" />
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/fragment_match_view.xml" value="0.1322463768115942" />
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/fragment_matches.xml" value="0.1322463768115942" />
+        <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/layout_cell_brackets.xml" value="0.11550151975683891" />
       </map>
     </option>
   </component>
