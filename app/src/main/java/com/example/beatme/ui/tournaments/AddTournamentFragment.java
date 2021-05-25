@@ -104,48 +104,95 @@ public class AddTournamentFragment extends DialogFragment {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if(user != null){
-                    int matchCounter = 0;
+
                     Map<String, Object> tournamentData = new HashMap<>();
-                    List<Map<String, Object>> tournamentMatches = new ArrayList<>();
+                    Map<String, Object> tournamentMatches = new HashMap<>();
+
                     tournamentData.put("user", user.getEmail());
                     tournamentData.put("tournamentName", tournamentNameString);
                     tournamentData.put("teamCount", teamName.size());
-                    for(int i=0;i<teamName.size()-1;i+=2){
-                        Map<String, String> map0 = new HashMap<>();
-                        map0.put("Score", "?");
-                        map0.put("TeamName", teamName.get(i));
-                        Map<String, String> map1 = new HashMap<>();
-                        map1.put("Score", "?");
-                        map1.put("TeamName", teamName.get(i+1));
-                        List<Map<String, String>> list = new ArrayList<>();
-                        list.add(map0);
-                        list.add(map1);
 
+                    int matchCounter = 0;
+                    int teamCounter = 0;
+                    int maxMatchCount = 2;
 
-                        Map<String, Object> match = new HashMap<>();
-                        match.put("match_0_"+matchCounter, list);
-                        tournamentMatches.add(match);
-
-                        //tournamentData.put("match_0_"+matchCounter , list);
-                        matchCounter++;
+                    if(teamName.size() > 2 && teamName.size() <= 4){
+                        maxMatchCount = 4;
                     }
-                    if(teamName.size() % 2 != 0){
-                        Map<String, String> map0 = new HashMap<>();
-                        map0.put("Score", "?");
-                        map0.put("TeamName", teamName.get(teamName.size()-1));
-                        List<Map<String, String>> list = new ArrayList<>();
-                        list.add(map0);
-
-                        Map<String, Object> match = new HashMap<>();
-                        match.put("match_0_"+matchCounter, list);
-                        tournamentMatches.add(match);
-
-                        //tournamentData.put("match_0_"+matchCounter , list);
+                    if(teamName.size() > 4 && teamName.size() <=8){
+                        maxMatchCount = 8;
                     }
-                    tournamentData.put("matches", tournamentMatches);
+
+                    if(teamName.size() > 8 && teamName.size() <= 16){
+                        maxMatchCount = 16;
+                    }
+                    if(teamName.size() > 16 && teamName.size() <= 32){
+                        maxMatchCount = 32;
+                    }
+
+                    int matchUtil = 0;
+                    while(matchCounter != maxMatchCount/2){
+                        if(teamCounter < teamName.size() - (maxMatchCount - teamName.size()) -1){
+                            Map<String, String> map0 = new HashMap<>();
+                            map0.put("Score", "?");
+                            map0.put("TeamName", teamName.get(teamCounter));
+                            Map<String, String> map1 = new HashMap<>();
+                            map1.put("Score", "?");
+                            map1.put("TeamName", teamName.get(teamCounter+1));
+
+                            List<Map<String, String>> list = new ArrayList<>();
+                            list.add(map0);
+                            list.add(map1);
+
+                            matchCounter++;
+                            teamCounter+=2;
+                            tournamentMatches.put("match_0_"+matchCounter, list);
+                        }else{
+                            Map<String, String> map0 = new HashMap<>();
+                            map0.put("Score", "x");
+                            map0.put("TeamName", teamName.get(teamCounter));
+                            Map<String, String> map1 = new HashMap<>();
+                            map1.put("Score", "0");
+                            map1.put("TeamName", "BYE");
+
+                            List<Map<String, String>> list = new ArrayList<>();
+                            list.add(map0);
+                            list.add(map1);
+
+                            matchCounter++;
+                            teamCounter++;
+                            tournamentMatches.put("match_0_"+matchCounter, list);
+                        }
+
+                    }
+
+                    int matchTemp = maxMatchCount/4;
+                    for(int i=1;i<maxMatchCount/2;i++){
+                        for(int j =0;j<matchTemp;j++){
+                            Map<String, String> map0 = new HashMap<>();
+                            map0.put("Score", "x");
+                            map0.put("TeamName", "Undecided");
+                            Map<String, String> map1 = new HashMap<>();
+                            map1.put("Score", "x");
+                            map1.put("TeamName", "Undecided");
+
+                            List<Map<String, String>> list = new ArrayList<>();
+                            list.add(map0);
+                            list.add(map1);
+
+
+                            matchCounter++;
+                            teamCounter++;
+                            tournamentMatches.put("match_"+i+"_"+j, list);
+                        }
+                        matchTemp/=2;
+                    }
+
+                    //tournamentData.put("matches", tournamentMatches);
 
                     db.collection("tournaments").add(tournamentData).addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        db.collection("tournaments").document(documentReference.getId()).collection("matches").add(tournamentMatches);
                         Toast.makeText(getContext(), "Tournament Saved",Toast.LENGTH_SHORT).show();
                         progressIndicator.setVisibility(View.INVISIBLE);
                         dismiss();
@@ -157,6 +204,7 @@ public class AddTournamentFragment extends DialogFragment {
                         progressIndicator.setVisibility(View.INVISIBLE);
                         dismiss();
                     });
+
                 }
             }else{
                 Toast.makeText(getContext(), "Fields Cannot be Empty!", Toast.LENGTH_SHORT).show();

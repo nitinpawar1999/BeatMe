@@ -41,9 +41,6 @@ public class WrapContentHeightViewPager extends ViewPager {
             int screenHeight = 200;
             if (screenHeight > height)
                 height = screenHeight;
-            //overriding wrap content feature
-            // int[] screenSize = getScreenSIze();
-            // height = 1800;
         }
 
 

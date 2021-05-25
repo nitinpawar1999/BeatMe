@@ -11,6 +11,9 @@ public class Tournament {
     private long teamCount;
     private List<Map<String, Object>> matches;
 
+    public Tournament(){
+
+    }
     public Tournament(String tournament_uid, String user, String tournamentName, long teamCount, List<Map<String, Object>> matches) {
         this.tournament_uid = tournament_uid;
         this.user = user;

@@ -1,6 +1,7 @@
 package com.example.beatme.ui.tournaments.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.beatme.R;
+import com.example.beatme.ui.tournaments.Tournament;
 import com.example.beatme.ui.tournaments.adapter.BracketsSectionAdapter;
 import com.example.beatme.ui.tournaments.customviews.WrapContentHeightViewPager;
 import com.example.beatme.ui.tournaments.model.ColumnData;
@@ -20,16 +22,22 @@ import com.example.beatme.ui.tournaments.utility.BracketsUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class BracketsFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
 
+    private static final String TAG = "BracketFragment";
     private WrapContentHeightViewPager viewPager;
     private BracketsSectionAdapter sectionAdapter;
     private ArrayList<ColumnData> sectionList;
     private int mNextSelectedScreen;
     private int mCurrentPagerState;
-
-
+    private Tournament tournament;
+    public BracketsFragment(Tournament tournament){
+        super();
+        this.tournament = tournament;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,55 +53,100 @@ public class BracketsFragment extends DialogFragment implements ViewPager.OnPage
     }
 
     private void setData() {
+
+        List<Map<String, Object>> matches = tournament.getMatches();
+
+
         sectionList = new ArrayList<>();
-        ArrayList<MatchData> Colomn1matchesList = new ArrayList<>();
-        ArrayList<MatchData> colomn2MatchesList = new ArrayList<>();
-        ArrayList<MatchData> colomn3MatchesList = new ArrayList<>();
-        CompetitorData competitorOne = new CompetitorData("Manchester United Fc", "2");
-        CompetitorData competitorTwo = new CompetitorData("Arsenal", "1");
-        CompetitorData competitorThree = new CompetitorData("Chelsea", "2");
-        CompetitorData competitorFour = new CompetitorData("Tottenham", "1");
-        CompetitorData competitorFive = new CompetitorData("Manchester FC", "2");
-        CompetitorData competitorSix = new CompetitorData("Liverpool", "4");
-        CompetitorData competitorSeven = new CompetitorData("West ham ", "2");
-        CompetitorData competitorEight = new CompetitorData("Bayern munich", "1");
-        MatchData matchData1 = new MatchData(competitorOne,competitorTwo);
-        MatchData matchData2 = new MatchData(competitorThree, competitorFour);
-        MatchData matchData3 = new MatchData(competitorFive,competitorSix);
-        MatchData matchData4 = new MatchData(competitorSeven, competitorEight);
-        Colomn1matchesList.add(matchData1);
-        Colomn1matchesList.add(matchData2);
-        Colomn1matchesList.add(matchData3);
-        Colomn1matchesList.add(matchData4);
-        ColumnData colomnData1 = new ColumnData(Colomn1matchesList);
+        int sectionCount = 1;
+        long teamCount = tournament.getTeamCount();
 
-        sectionList.add(colomnData1);
+        if(teamCount>2 && teamCount<=4){
+            sectionCount = 2;
+        }else if(teamCount>4 && teamCount<=8){
+            sectionCount = 3;
+        }else if(teamCount>8 && teamCount<=16){
+            sectionCount = 4;
+        }else {
+            sectionCount = 5;
+        }
 
-        CompetitorData competitorNine = new CompetitorData("Manchester United Fc", "2");
-        CompetitorData competitorTen = new CompetitorData("Chelsea", "4");
-        CompetitorData competitorEleven = new CompetitorData("Liverpool", "2");
-        CompetitorData competitorTwelve = new CompetitorData("westham", "1");
-        MatchData matchData5 = new MatchData(competitorNine,competitorTen);
-        MatchData matchData6 = new MatchData(competitorEleven, competitorTwelve);
-        colomn2MatchesList.add(matchData5);
-        colomn2MatchesList.add(matchData6);
-        ColumnData colomnData2 = new ColumnData(colomn2MatchesList);
+        int current = 0;
+        for(int i=sectionCount;i>=1;i--){
+            ArrayList<MatchData> ColumnMatchesList = new ArrayList<>();
+            switch (i){
+                case 1:{
+                    Map<String, Object> tempMap = matches.get(current);
+                    for(Entry<String, Object> entry: tempMap.entrySet()){
+                        List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
+                        MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
+                        matchData.setMatch_id(entry.getKey());
+                        ColumnMatchesList.add(matchData);
+                    }
+                    break;
+                }
+                case 2:{
+                    for(int j=0;j<2;j++){
+                        Map<String, Object> tempMap = matches.get(current+j);
+                        for(Entry<String, Object> entry: tempMap.entrySet()){
+                            List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
+                            MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
+                            matchData.setMatch_id(entry.getKey());
+                            ColumnMatchesList.add(matchData);
+                        }
+                    }
+                    current+=2;
+                    break;
+                }
+                case 3:{
+                    for(int j=0;j<4;j++){
+                        Map<String, Object> tempMap = matches.get(current+j);
+                        for(Entry<String, Object> entry: tempMap.entrySet()){
+                            List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
+                            MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
+                            matchData.setMatch_id(entry.getKey());
+                            ColumnMatchesList.add(matchData);
+                        }
+                    }
+                    current+=4;
+                    break;
+                }
+                case 4:{
+                    for(int j=0;j<8;j++){
+                        Map<String, Object> tempMap = matches.get(current+j);
+                        for(Entry<String, Object> entry: tempMap.entrySet()){
+                            List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
+                            MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
+                            matchData.setMatch_id(entry.getKey());
+                            ColumnMatchesList.add(matchData);
+                        }
+                    }
+                    current+=8;
+                    break;
+                }
+                case 5:{
+                    for(int j=0;j<16;j++){
+                        Map<String, Object> tempMap = matches.get(current+j);
+                        for(Entry<String, Object> entry: tempMap.entrySet()){
+                            List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
+                            MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
+                            matchData.setMatch_id(entry.getKey());
+                            ColumnMatchesList.add(matchData);
+                        }
+                    }
+                    current+=16;
+                    break;
+                }
+            }
 
-        sectionList.add(colomnData2);
-
-        CompetitorData competitorThirteen = new CompetitorData("Chelsea", "2");
-        CompetitorData competitorForteen = new CompetitorData("Liverpool", "1");
-        MatchData matchData7 = new MatchData(competitorThirteen, competitorForteen);
-        colomn3MatchesList.add(matchData7);
-        ColumnData colomnData3 = new ColumnData(colomn3MatchesList);
-
-        sectionList.add(colomnData3);
+            sectionList.add(new ColumnData(ColumnMatchesList));
+        }
 
     }
 
     private void intialiseViewPagerAdapter() {
 
-        sectionAdapter = new BracketsSectionAdapter(getChildFragmentManager(),this.sectionList);
+        sectionAdapter = new BracketsSectionAdapter(getChildFragmentManager(),this.sectionList, tournament.getTournament_uid());
         viewPager.setOffscreenPageLimit(10);
         viewPager.setAdapter(sectionAdapter);
         viewPager.setCurrentItem(0);

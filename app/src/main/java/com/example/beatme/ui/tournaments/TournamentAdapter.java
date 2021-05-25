@@ -44,9 +44,7 @@ public class TournamentAdapter extends RecyclerView.Adapter<TournamentAdapter.Vi
         holder.tournamentLabel.setText(label);
         holder.tournamentUsername.setText(by);
         holder.constraintLayout.setOnClickListener(v -> {
-            //TODO
-            Log.d(TAG, tournament.getMatches().toString());
-            BracketsFragment bracketsFragment = new BracketsFragment();
+            BracketsFragment bracketsFragment = new BracketsFragment(tournament);
             bracketsFragment.show(fragmentManager, "dialogTournament");
         });
     }

@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.beatme.R;
-import com.example.beatme.ui.matches.MatchAdapter;
-import com.example.beatme.ui.tournaments.Fragment.BracketsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.tabs.TabLayout;
@@ -28,9 +25,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TournamentsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
@@ -113,7 +113,25 @@ public class TournamentsFragment extends Fragment implements SwipeRefreshLayout.
                         }
                         String tournamentName = (String) documentSnapshot.get("tournamentName");
                         long teamCount = (long) documentSnapshot.get("teamCount");
-                        List<Map<String, Object>> matches = (List<Map<String, Object>>) documentSnapshot.get("matches");
+
+                        //Log.d(TAG, documentSnapshot.toString());
+                        List<Map<String, Object>> matches = new ArrayList<>();
+                        db.collection("tournaments").document(documentSnapshot.getId()).collection("matches").get().addOnCompleteListener(task1 -> {
+                        if(task1.isSuccessful()){
+                            for(QueryDocumentSnapshot documentSnapshot1 : task1.getResult()){
+                                TreeMap<String, Object> sorted = new TreeMap<>();
+                                sorted.putAll(documentSnapshot1.getData());
+                                for(Map.Entry<String, Object> entry : sorted.entrySet()){
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put(entry.getKey(), entry.getValue());
+                                    matches.add(map);
+                                }
+                            }
+                        }else {
+                            Log.d(TAG, "Error getting data", task.getException());
+                            Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                        });
 
                         Tournament tournament = new Tournament(tournament_uid, userString, tournamentName, teamCount, matches);
                         list.add(tournament);
@@ -127,11 +145,13 @@ public class TournamentsFragment extends Fragment implements SwipeRefreshLayout.
                 linearProgressIndicator.setVisibility(View.INVISIBLE);
             });
         }
+
     }
 
     public void getCurrentUsersTournaments() {
         linearProgressIndicator.setVisibility(View.VISIBLE);
         List<Tournament> list = new ArrayList<>();
+        String[] matches_uid = new String[1];
         if(user != null){
             db.collection("tournaments").whereEqualTo("user", user.getEmail()).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -145,7 +165,24 @@ public class TournamentsFragment extends Fragment implements SwipeRefreshLayout.
                         }
                         String tournamentName = (String) documentSnapshot.get("tournamentName");
                         long teamCount = (long) documentSnapshot.get("teamCount");
-                        List<Map<String, Object>> matches = (List<Map<String, Object>>) documentSnapshot.get("matches");
+
+                        List<Map<String, Object>> matches = new ArrayList<>();
+                        db.collection("tournaments").document(documentSnapshot.getId()).collection("matches").get().addOnCompleteListener(task1 -> {
+                            if(task1.isSuccessful()){
+                                for(QueryDocumentSnapshot documentSnapshot1 : task1.getResult()){
+                                    TreeMap<String, Object> sorted = new TreeMap<>();
+                                    sorted.putAll(documentSnapshot1.getData());
+                                    for(Map.Entry<String, Object> entry : sorted.entrySet()){
+                                        Map<String, Object> map = new HashMap<>();
+                                        map.put(entry.getKey(), entry.getValue());
+                                        matches.add(map);
+                                    }
+                                }
+                            }else {
+                                Log.d(TAG, "Error getting data", task.getException());
+                                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                         Tournament tournament = new Tournament(tournament_uid, userString, tournamentName, teamCount, matches);
                         list.add(tournament);
@@ -165,7 +202,6 @@ public class TournamentsFragment extends Fragment implements SwipeRefreshLayout.
     public void initializeRecyclerView(@NotNull RecyclerView recyclerView, TournamentAdapter adapter) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override

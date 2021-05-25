@@ -6,6 +6,7 @@ public class MatchData implements Serializable {
 
     private CompetitorData competitorOne;
     private CompetitorData competitorTwo;
+    private String match_id;
     private int height;
 
     public int getHeight() {
@@ -36,5 +37,12 @@ public class MatchData implements Serializable {
 
     public void setCompetitorOne(CompetitorData competitorOne) {
         this.competitorOne = competitorOne;
+    }
+    public String getMatch_id() {
+        return match_id;
+    }
+
+    public void setMatch_id(String match_id) {
+        this.match_id = match_id;
     }
 }

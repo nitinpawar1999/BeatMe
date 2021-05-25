@@ -5,11 +5,13 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.beatme.R;
 import com.example.beatme.ui.tournaments.Fragment.BracketsColumnFragment;
+import com.example.beatme.ui.tournaments.UpdateTournamentFragment;
 import com.example.beatme.ui.tournaments.model.MatchData;
 import com.example.beatme.ui.tournaments.viewholder.BracketsCellViewHolder;
 
@@ -21,12 +23,14 @@ public class BracketsCellAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context context;
     private ArrayList<MatchData> list;
     private boolean handler;
+    private String tournament_uid;
 
-    public BracketsCellAdapter(BracketsColumnFragment bracketsColumnFragment, Context context, ArrayList<MatchData> list) {
+    public BracketsCellAdapter(BracketsColumnFragment bracketsColumnFragment, Context context, ArrayList<MatchData> list, String tournament_uid) {
 
         this.fragment = bracketsColumnFragment;
         this.context = context;
         this.list = list;
+        this.tournament_uid = tournament_uid;
     }
 
     @Override
@@ -42,7 +46,14 @@ public class BracketsCellAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (holder instanceof BracketsCellViewHolder){
             viewHolder = (BracketsCellViewHolder) holder;
             setFields(viewHolder, position);
+            viewHolder.rootLayout.setOnClickListener(v->{
+                UpdateTournamentFragment updateTournamentFragment = new UpdateTournamentFragment(list.get(position), tournament_uid);
+                updateTournamentFragment.show(fragment.getChildFragmentManager(), "dialogScoreTournament");
+
+            });
         }
+
+
     }
 
     private void setFields(final BracketsCellViewHolder viewHolder, final int position) {

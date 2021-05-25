@@ -29,6 +29,12 @@ public class BracketsColumnFragment extends Fragment {
 
     private BracketsCellAdapter adapter;
 
+    private String tournament_uid;
+
+    public BracketsColumnFragment(String tournament_uid){
+        super();
+        this.tournament_uid = tournament_uid;
+    }
 
     @Nullable
     @Override
@@ -45,7 +51,6 @@ public class BracketsColumnFragment extends Fragment {
     }
 
     private void initViews() {
-        /* TODO */
         bracketsRV = getView().findViewById(R.id.rv_score_board);
     }
 
@@ -99,9 +104,7 @@ public class BracketsColumnFragment extends Fragment {
         adapter.setList(list);
     }
     private void initAdapter() {
-
-//        pBar.setVisibility(View.GONE);
-        adapter = new BracketsCellAdapter(this, getContext(), list);
+        adapter = new BracketsCellAdapter(this, getContext(), list, tournament_uid);
         if (bracketsRV != null) {
             bracketsRV.setHasFixedSize(true);
             bracketsRV.setNestedScrollingEnabled(false);

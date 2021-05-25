@@ -18,7 +18,7 @@ public class BracketsCellViewHolder extends RecyclerView.ViewHolder {
     private TextView teamOneScore;
     private TextView teamTwoScore;
     private Animation animation;
-    private RelativeLayout rootLayout;
+    public RelativeLayout rootLayout;
 
     public BracketsCellViewHolder(View itemView) {
         super(itemView);
