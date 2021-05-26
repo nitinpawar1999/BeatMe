@@ -150,7 +150,7 @@
                 android:text="@string/register"
                 android:layout_margin="20dp"
                 android:layout_gravity="center"
-                android:backgroundTint="#00ADC1"
+                android:backgroundTint="#45526c"
 
                 android:textColor="@color/white"
                 />
@@ -161,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                android:textColor="@color/themeColor"
+                android:textColor="#5aa897"
                 android:textSize="17sp"
                 android:text="@string/already_a_user_click_here"
                 android:layout_gravity="center"/>

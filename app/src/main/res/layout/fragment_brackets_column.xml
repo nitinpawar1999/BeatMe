@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_marginRight="85dp"
         android:layout_marginLeft="10dp"
-        android:background="#110f0f">
+        android:background="#f8f5f1">
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView

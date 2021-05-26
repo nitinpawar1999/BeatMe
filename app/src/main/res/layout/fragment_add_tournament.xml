@@ -93,7 +93,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:contentDescription="@string/add_team"
         android:layout_margin="5dp"
-        app:backgroundTint="#666666"
+        app:backgroundTint="#f8f5f1"
         app:srcCompat="@drawable/ic_baseline_add_24"
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -106,7 +106,7 @@
         app:layout_constraintStart_toEndOf="@id/fragment_add_tournament_add_team"
         android:contentDescription="@string/add_team"
         android:layout_margin="5dp"
-        app:backgroundTint="#666666"
+        app:backgroundTint="#f8f5f1"
         app:srcCompat="@drawable/ic_baseline_horizontal_rule_24"
         />
 
