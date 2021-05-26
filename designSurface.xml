@@ -2,6 +2,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/activity_landing_page.xml" value="0.12310030395136778" />
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/activity_login.xml" value="0.1322463768115942" />
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/activity_register.xml" value="0.1322463768115942" />
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/fragment_brackets.xml" value="0.12310030395136778" />
@@ -14,6 +15,8 @@
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/tournament_item.xml" value="0.11474164133738601" />
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/tournament_score_update.xml" value="0.1" />
         <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/layout/tournamnet_score_update.xml" value="0.253125" />
+        <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/menu/activity_main_drawer.xml" value="0.24923076923076923" />
+        <entry key="..\:/Users/NitinPawar/AndroidStudioProjects/BeatMe/app/src/main/res/menu/landing_page.xml" value="0.21388888888888888" />
       </map>
     </option>
   </component>
