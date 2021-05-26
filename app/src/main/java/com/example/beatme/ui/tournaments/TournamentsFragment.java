@@ -105,6 +105,8 @@ public class TournamentsFragment extends Fragment implements SwipeRefreshLayout.
                 if (task.isSuccessful()) {
                     for(QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                         String tournament_uid = documentSnapshot.getId();
+                        String matches_uid = (String) documentSnapshot.get("matches_uid");
+                        String email = (String) documentSnapshot.get("user");
                         String userString;
                         if (Objects.equals(user.getEmail(), documentSnapshot.get("user"))) {
                             userString = "You";
@@ -133,7 +135,7 @@ public class TournamentsFragment extends Fragment implements SwipeRefreshLayout.
                         }
                         });
 
-                        Tournament tournament = new Tournament(tournament_uid, userString, tournamentName, teamCount, matches);
+                        Tournament tournament = new Tournament(tournament_uid, matches_uid, userString, email, tournamentName, teamCount, matches);
                         list.add(tournament);
                     }
                     tournamentAdapter = new TournamentAdapter(list, currentTab, getChildFragmentManager());
@@ -151,12 +153,13 @@ public class TournamentsFragment extends Fragment implements SwipeRefreshLayout.
     public void getCurrentUsersTournaments() {
         linearProgressIndicator.setVisibility(View.VISIBLE);
         List<Tournament> list = new ArrayList<>();
-        String[] matches_uid = new String[1];
         if(user != null){
             db.collection("tournaments").whereEqualTo("user", user.getEmail()).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     for(QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                         String tournament_uid = documentSnapshot.getId();
+                        String matches_uid = (String) documentSnapshot.get("matches_uid");
+                        String email = (String) documentSnapshot.get("user");
                         String userString;
                         if (Objects.equals(user.getEmail(), documentSnapshot.get("user"))) {
                             userString = "You";
@@ -184,7 +187,7 @@ public class TournamentsFragment extends Fragment implements SwipeRefreshLayout.
                             }
                         });
 
-                        Tournament tournament = new Tournament(tournament_uid, userString, tournamentName, teamCount, matches);
+                        Tournament tournament = new Tournament(tournament_uid, matches_uid, userString, email, tournamentName, teamCount, matches);
                         list.add(tournament);
                     }
                     tournamentAdapter = new TournamentAdapter(list, currentTab, getChildFragmentManager());

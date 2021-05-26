@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.beatme.R;
+import com.example.beatme.ui.tournaments.model.CompetitorData;
 import com.example.beatme.ui.tournaments.model.MatchData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -48,8 +49,8 @@ public class UpdateTournamentFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull @NotNull LayoutInflater inflater, @Nullable @org.jetbrains.annotations.Nullable ViewGroup container, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         View tournamentScoreUpdate = inflater.inflate(R.layout.tournament_score_update, container, false);
-        TextView tournamentScoreTeamName1 = tournamentScoreUpdate.findViewById(R.id.tournament_score_teamName1);
-        TextView tournamentScoreTeamName2 = tournamentScoreUpdate.findViewById(R.id.tournament_score_teamName2);
+        EditText tournamentScoreTeamName1 = tournamentScoreUpdate.findViewById(R.id.tournament_score_teamName1);
+        EditText tournamentScoreTeamName2 = tournamentScoreUpdate.findViewById(R.id.tournament_score_teamName2);
         EditText tournamentScoreTeamScore1 = tournamentScoreUpdate.findViewById(R.id.tournament_score_teamScore1);
         EditText tournamentScoreTeamScore2 = tournamentScoreUpdate.findViewById(R.id.tournament_score_teamScore2);
         if(tournamentScoreTeamName1.getText().equals("BYE")) tournamentScoreTeamScore1.setText(0);
@@ -58,6 +59,8 @@ public class UpdateTournamentFragment extends DialogFragment {
 
         tournamentScoreTeamName1.setText(matchData.getCompetitorOne().getName());
         tournamentScoreTeamName2.setText(matchData.getCompetitorTwo().getName());
+        tournamentScoreTeamScore1.setText(matchData.getCompetitorOne().getScore());
+        tournamentScoreTeamScore2.setText(matchData.getCompetitorTwo().getScore());
 
         Button tournamentScoreUpdateBtn = tournamentScoreUpdate.findViewById(R.id.tournament_score_update_btn);
 
@@ -96,9 +99,6 @@ public class UpdateTournamentFragment extends DialogFragment {
                         });
                     }
                 });
-
-
-
             }
             dismiss();
         });

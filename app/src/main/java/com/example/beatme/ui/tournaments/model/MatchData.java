@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 public class MatchData implements Serializable {
 
+
+
+    private String user;
     private CompetitorData competitorOne;
     private CompetitorData competitorTwo;
     private String match_id;
@@ -44,5 +47,12 @@ public class MatchData implements Serializable {
 
     public void setMatch_id(String match_id) {
         this.match_id = match_id;
+    }
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

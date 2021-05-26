@@ -2,6 +2,7 @@ package com.example.beatme.ui.tournaments.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,14 @@ import com.example.beatme.ui.tournaments.Fragment.BracketsColumnFragment;
 import com.example.beatme.ui.tournaments.UpdateTournamentFragment;
 import com.example.beatme.ui.tournaments.model.MatchData;
 import com.example.beatme.ui.tournaments.viewholder.BracketsCellViewHolder;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
 public class BracketsCellAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
+    private static final String TAG = "BracketsCellAdapter";
     private BracketsColumnFragment fragment;
     private Context context;
     private ArrayList<MatchData> list;
@@ -47,9 +51,14 @@ public class BracketsCellAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolder = (BracketsCellViewHolder) holder;
             setFields(viewHolder, position);
             viewHolder.rootLayout.setOnClickListener(v->{
-                UpdateTournamentFragment updateTournamentFragment = new UpdateTournamentFragment(list.get(position), tournament_uid);
-                updateTournamentFragment.show(fragment.getChildFragmentManager(), "dialogScoreTournament");
-
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Log.d(TAG, user.getEmail());
+                Log.d(TAG, list.get(position).getUser());
+                if(user.getEmail().equals(list.get(position).getUser())) {
+                    UpdateTournamentFragment updateTournamentFragment = new UpdateTournamentFragment(list.get(position), tournament_uid);
+                    updateTournamentFragment.show(fragment.getChildFragmentManager(), "dialogScoreTournament");
+                    notifyDataSetChanged();
+                }
             });
         }
 
@@ -62,7 +71,7 @@ public class BracketsCellAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             public void run() {
                 viewHolder.setAnimation(list.get(position).getHeight());
             }
-        }, 100);
+        }, 0);
 
         viewHolder.getTeamOneName().setText(list.get(position).getCompetitorOne().getName());
         viewHolder.getTeamTwoName().setText(list.get(position).getCompetitorTwo().getName());

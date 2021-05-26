@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -19,11 +20,19 @@ import com.example.beatme.ui.tournaments.model.ColumnData;
 import com.example.beatme.ui.tournaments.model.CompetitorData;
 import com.example.beatme.ui.tournaments.model.MatchData;
 import com.example.beatme.ui.tournaments.utility.BracketsUtility;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 public class BracketsFragment extends DialogFragment implements ViewPager.OnPageChangeListener {
 
@@ -41,7 +50,40 @@ public class BracketsFragment extends DialogFragment implements ViewPager.OnPage
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_brackets, container, false);
+
+        View bracketsFragment = inflater.inflate(R.layout.fragment_brackets, container, false);
+
+        FloatingActionButton fb = bracketsFragment.findViewById(R.id.brackets_floating_action_button);
+
+        fb.setOnClickListener(v -> {
+            List<Map<String, Object>> matches = new ArrayList<>();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if(user != null){
+                db.collection("tournaments").document(tournament.getTournament_uid()).collection("matches").get().addOnCompleteListener(task -> {
+                   if(task.isSuccessful()){
+                       for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                           TreeMap<String, Object> sorted = new TreeMap<>();
+                           sorted.putAll(documentSnapshot.getData());
+                           for(Map.Entry<String, Object> entry : sorted.entrySet()){
+                               Map<String, Object> map = new HashMap<>();
+                               map.put(entry.getKey(), entry.getValue());
+                               matches.add(map);
+                           }
+                       }
+                   }else {
+                       Log.d(TAG, "Error getting data", task.getException());
+                       Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                   }
+                   tournament.setMatches(matches);
+                    initViews();
+                    setData();
+                    intialiseViewPagerAdapter();
+                });
+            }
+        });
+
+        return bracketsFragment;
     }
 
     @Override
@@ -67,7 +109,7 @@ public class BracketsFragment extends DialogFragment implements ViewPager.OnPage
             sectionCount = 3;
         }else if(teamCount>8 && teamCount<=16){
             sectionCount = 4;
-        }else {
+        }else if(teamCount>16 && teamCount<=32){
             sectionCount = 5;
         }
 
@@ -81,6 +123,7 @@ public class BracketsFragment extends DialogFragment implements ViewPager.OnPage
                         List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
                         MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
                         matchData.setMatch_id(entry.getKey());
+                        matchData.setUser(tournament.getEmail());
                         ColumnMatchesList.add(matchData);
                     }
                     break;
@@ -92,6 +135,7 @@ public class BracketsFragment extends DialogFragment implements ViewPager.OnPage
                             List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
                             MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
                             matchData.setMatch_id(entry.getKey());
+                            matchData.setUser(tournament.getEmail());
                             ColumnMatchesList.add(matchData);
                         }
                     }
@@ -105,6 +149,7 @@ public class BracketsFragment extends DialogFragment implements ViewPager.OnPage
                             List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
                             MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
                             matchData.setMatch_id(entry.getKey());
+                            matchData.setUser(tournament.getEmail());
                             ColumnMatchesList.add(matchData);
                         }
                     }
@@ -118,6 +163,7 @@ public class BracketsFragment extends DialogFragment implements ViewPager.OnPage
                             List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
                             MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
                             matchData.setMatch_id(entry.getKey());
+                            matchData.setUser(tournament.getEmail());
                             ColumnMatchesList.add(matchData);
                         }
                     }
@@ -131,6 +177,7 @@ public class BracketsFragment extends DialogFragment implements ViewPager.OnPage
                             List<Map<String, String>> temp = (List<Map<String, String>>) entry.getValue();
                             MatchData matchData = new MatchData(new CompetitorData(temp.get(0).get("TeamName"), temp.get(0).get("Score")),new CompetitorData(temp.get(1).get("TeamName"), temp.get(1).get("Score")));
                             matchData.setMatch_id(entry.getKey());
+                            matchData.setUser(tournament.getEmail());
                             ColumnMatchesList.add(matchData);
                         }
                     }

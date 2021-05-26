@@ -25,7 +25,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -192,7 +194,11 @@ public class AddTournamentFragment extends DialogFragment {
 
                     db.collection("tournaments").add(tournamentData).addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        db.collection("tournaments").document(documentReference.getId()).collection("matches").add(tournamentMatches);
+                        db.collection("tournaments").document(documentReference.getId()).collection("matches").add(tournamentMatches).addOnSuccessListener(documentReference1 -> {
+                            Map<String, String> matchesUid = new HashMap<>();
+                            matchesUid.put("matches_uid", documentReference1.getId());
+                            documentReference.set(matchesUid, SetOptions.merge());
+                        });
                         Toast.makeText(getContext(), "Tournament Saved",Toast.LENGTH_SHORT).show();
                         progressIndicator.setVisibility(View.INVISIBLE);
                         dismiss();
